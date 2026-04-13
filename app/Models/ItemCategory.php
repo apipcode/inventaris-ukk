@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Validation\ValidationException;
 
 class ItemCategory extends Model
 {
@@ -16,5 +17,23 @@ class ItemCategory extends Model
     public function itemStocks(): HasMany
     {
         return $this->hasMany(ItemStock::class, 'category_id');
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (ItemCategory $itemCategory): void {
+            $normalizedName = mb_strtolower(trim((string) $itemCategory->name));
+
+            $duplicateExists = static::query()
+                ->whereRaw('LOWER(name) = ?', [$normalizedName])
+                ->when($itemCategory->exists, fn ($query) => $query->whereKeyNot($itemCategory->getKey()))
+                ->exists();
+
+            if ($duplicateExists) {
+                throw ValidationException::withMessages([
+                    'name' => 'Nama kategori sudah digunakan. Gunakan nama lain agar tidak duplikasi.',
+                ]);
+            }
+        });
     }
 }

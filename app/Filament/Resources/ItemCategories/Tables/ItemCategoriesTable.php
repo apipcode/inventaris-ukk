@@ -2,15 +2,17 @@
 
 namespace App\Filament\Resources\ItemCategories\Tables;
 
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\ExportAction;
-use Filament\Actions\Exports\Enums\ExportFormat;
-use App\Filament\Exports\ItemCategoryExporter;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+
+use App\Models\ItemCategory;
+use App\Support\PdfExport;
 
 class ItemCategoriesTable
 {
@@ -21,33 +23,50 @@ class ItemCategoriesTable
                 TextColumn::make('name')
                     ->label('Nama Kategori')
                     ->searchable(),
+
                 TextColumn::make('division')
                     ->label('Divisi')
                     ->searchable(),
-                // Menampilkan jumlah total item barang yang terdaftar di bawah kategori ini.
-                // Menggunakan fungsi counts('itemStocks') yang merujuk pada relasi di Model ItemCategory.
+
                 TextColumn::make('item_stocks_count')
                     ->counts('itemStocks')
                     ->label('Jumlah Barang')
                     ->sortable(),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime('d M Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ])
             ->headerActions([
-                ExportAction::make()
-                    ->exporter(ItemCategoryExporter::class)
-                    ->formats([ExportFormat::Csv])
-                    ->label('Export CSV'),
+                Action::make('exportPdf')
+                    ->label('Export PDF')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function () {
+                        $rows = ItemCategory::query()
+                            ->withCount('itemStocks')
+                            ->orderBy('name')
+                            ->get()
+                            ->map(fn (ItemCategory $category): array => [
+                                $category->name,
+                                $category->division,
+                                $category->item_stocks_count,
+                                optional($category->created_at)?->format('d M Y'),
+                            ])
+                            ->all();
+
+                        return PdfExport::download(
+                            filename: 'item-categories.pdf',
+                            title: 'Data Kategori Barang',
+                            headers: ['Nama Kategori', 'Divisi', 'Jumlah Barang', 'Dibuat'],
+                            rows: $rows,
+                        );
+                    }),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

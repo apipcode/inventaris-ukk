@@ -15,10 +15,6 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-// Tambahan import untuk Export
-use App\Filament\Exports\BorrowedItemExporter;
-// use Filament\Actions; // Dihapus karena sudah ditangani di class Table terkait
-
 class BorrowedItemResource extends Resource
 {
     protected static ?string $model = BorrowedItem::class;

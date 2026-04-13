@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\ExportAction;
-use Filament\Actions\Exports\Enums\ExportFormat;
-use App\Filament\Exports\UserExporter;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use App\Models\User;
+use App\Support\PdfExport;
 
 class UsersTable
 {
@@ -47,10 +47,28 @@ class UsersTable
                 DeleteAction::make(),
             ])
             ->headerActions([
-                ExportAction::make()
-                    ->exporter(UserExporter::class)
-                    ->formats([ExportFormat::Csv])
-                    ->label('Export CSV'),
+                Action::make('exportPdf')
+                    ->label('Export PDF')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function () {
+                        $rows = User::query()
+                            ->orderBy('name')
+                            ->get()
+                            ->map(fn (User $user): array => [
+                                $user->name,
+                                $user->email,
+                                $user->role,
+                                optional($user->created_at)?->format('d M Y'),
+                            ])
+                            ->all();
+
+                        return PdfExport::download(
+                            filename: 'users.pdf',
+                            title: 'Data Pengguna',
+                            headers: ['Nama', 'Email', 'Role', 'Dibuat'],
+                            rows: $rows,
+                        );
+                    }),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

@@ -11,6 +11,7 @@ class ReturnedItem extends Model
         'staff_id',
         'borrowed_item_id',
         'return_date',
+        'total_damaged',
         'notes'
     ];
 
