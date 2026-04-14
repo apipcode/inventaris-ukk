@@ -1,58 +1,264 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📦 Inventaris UKK
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Aplikasi manajemen inventaris barang berbasis web yang dibangun dengan **Laravel 13** dan **Filament v4**. Dikembangkan sebagai proyek Uji Kompetensi Keahlian (UKK).
 
-## About Laravel
+[![Laravel](https://img.shields.io/badge/Laravel-13.x-red?logo=laravel)](https://laravel.com)
+[![Filament](https://img.shields.io/badge/Filament-v4-orange?logo=filament)](https://filamentphp.com)
+[![PHP](https://img.shields.io/badge/PHP-8.3+-blue?logo=php)](https://php.net)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 Deskripsi Proyek
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Sistem Inventaris UKK adalah aplikasi admin panel yang dirancang untuk memudahkan pengelolaan barang inventaris di suatu organisasi atau instansi. Fitur utama mencakup:
 
-## Learning Laravel
+- ✅ Manajemen **kategori barang** dan **data stok** inventaris
+- ✅ Pencatatan **transaksi peminjaman** dan **pengembalian barang**
+- ✅ Pembaruan stok secara **otomatis** saat transaksi terjadi
+- ✅ **Ekspor PDF** untuk semua jenis laporan data
+- ✅ **Cetak struk** peminjaman per transaksi
+- ✅ Sistem **role-based access control** (Admin & Staff)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🗂️ Struktur Menu
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+| Menu | Grup | Akses |
+|------|------|-------|
+| Kategori Barang | Master Data | Admin saja |
+| Data Barang | Master Data | Admin saja |
+| Peminjaman | Transaksi | Admin & Staff |
+| Pengguna | Pengaturan | Admin & Staff |
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 👥 Role & Hak Akses
 
+| Fitur | Admin | Staff |
+|-------|:-----:|:-----:|
+| Kelola Kategori Barang | ✅ | ❌ |
+| Kelola Data Barang (Stok) | ✅ | ❌ |
+| Lihat & Catat Peminjaman | ✅ | ✅ |
+| Kembalikan Barang | ✅ | ✅ |
+| Cetak Struk Peminjaman | ✅ | ✅ |
+| Export PDF (semua modul) | ✅ | ✅ |
+| Edit Data Peminjaman | ✅ | ❌ |
+| Kelola Pengguna (Admin) | ✅ | ❌ |
+| Kelola Sesama Staff | ✅ | ✅ |
+| Ubah Role Pengguna | ✅ | ❌ |
+
+---
+
+## 🛠️ Tech Stack
+
+| Teknologi | Versi | Fungsi |
+|-----------|-------|--------|
+| **PHP** | ^8.3 | Bahasa pemrograman backend |
+| **Laravel** | ^13.0 | Framework PHP utama |
+| **Filament** | v4 (`*`) | Admin panel & CRUD builder |
+| **MySQL / SQLite** | - | Database relasional |
+| **barryvdh/laravel-dompdf** | ^3.1 | Generasi file PDF |
+| **Vite** | - | Bundler aset frontend |
+
+---
+
+## ⚙️ Cara Instalasi
+
+### Prerequisites
+
+Pastikan sudah terinstal:
+- PHP 8.3+
+- Composer
+- Node.js & NPM
+- MySQL (atau gunakan SQLite untuk pengembangan lokal)
+
+### Langkah-langkah
+
+**1. Clone repositori**
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/apipcode/inventaris-ukk.git
+cd inventaris-ukk
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+**2. Instal dependensi PHP**
+```bash
+composer install
+```
 
-## Contributing
+**3. Salin file environment**
+```bash
+cp .env.example .env
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**4. Generate application key**
+```bash
+php artisan key:generate
+```
 
-## Code of Conduct
+**5. Konfigurasi database di file `.env`**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=inventaris_ukk
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+> 💡 **Tips:** Untuk pengembangan cepat, gunakan SQLite dengan mengatur `DB_CONNECTION=sqlite` dan hapus baris `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`.
 
-## Security Vulnerabilities
+**6. Jalankan migrasi & seed data awal**
+```bash
+php artisan migrate --seed
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**7. Instal dependensi frontend & build aset**
+```bash
+npm install
+npm run build
+```
 
-## License
+**8. Jalankan server pengembangan**
+```bash
+composer run dev
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Atau secara terpisah:
+```bash
+php artisan serve
+```
+
+**9. Buka di browser**
+
+Akses panel admin di: **[http://localhost:8000/admin](http://localhost:8000/admin)**
+
+---
+
+## 🔑 Akun Default (Seeder)
+
+> ⚠️ **Penting:** Segera ubah password ini setelah pertama kali login di environment production!
+
+| Role | Email | Password |
+|------|-------|----------|
+| **Admin** | `admin@admin.com` | `password` |
+| **Staff** | `staff@staff.com` | `password` |
+
+---
+
+## 🗄️ Skema Database
+
+```
+item_categories          item_stocks
+──────────────           ────────────────────────
+id (PK)          ◄─┐    id (PK)
+name             │  └── category_id (FK)
+division             item_name
+created_at           total_stock
+updated_at           total_repaired
+                     total_borrowed  ← otomatis dikelola sistem
+                     created_at
+                     updated_at
+                          │
+                          ▼ (FK: item_id)
+                     borrowed_items
+                     ────────────────────────
+                     id (PK)
+                     staff_id (FK → users)
+                     item_id (FK → item_stocks)
+                     total_item
+                     name_of_borrower
+                     date
+                     notes
+                     created_at
+                     updated_at
+                          │
+                          ▼ (FK: borrowed_item_id)
+                     returned_items
+                     ────────────────────────
+                     id (PK)
+                     staff_id (FK → users)
+                     borrowed_item_id (FK)
+                     return_date
+                     total_damaged
+                     notes
+                     created_at
+                     updated_at
+```
+
+---
+
+## 🔄 Alur Logika Otomatis (Side Effects)
+
+### Saat Peminjaman Baru Dicatat
+```
+BorrowedItem::created()
+  → item_stocks.total_stock   -= total_item
+  → item_stocks.total_borrowed += total_item
+```
+
+### Saat Barang Dikembalikan
+```
+Aksi "Kembalikan" di tabel Peminjaman
+  → ReturnedItem::create(...)
+  → item_stocks.total_stock    += jumlah_baik
+  → item_stocks.total_repaired += jumlah_rusak
+  → item_stocks.total_borrowed -= total_item
+```
+
+### Saat Data Peminjaman Dihapus (Sebelum Dikembalikan)
+```
+BorrowedItem::deleting()
+  → item_stocks.total_stock    += total_item  (dikembalikan ke stok)
+  → item_stocks.total_borrowed -= total_item
+```
+
+---
+
+## 📁 Struktur Direktori Utama
+
+```
+app/
+├── Filament/
+│   └── Resources/
+│       ├── BorrowedItems/          # Resource transaksi peminjaman
+│       │   ├── BorrowedItemResource.php
+│       │   ├── Pages/              # Create, Edit, List
+│       │   ├── Schemas/            # Form fields (BorrowedItemForm.php)
+│       │   └── Tables/             # Kolom & aksi tabel (BorrowedItemsTable.php)
+│       ├── ItemCategories/         # Resource kategori barang
+│       ├── ItemStocks/             # Resource data stok barang
+│       └── Users/                  # Resource manajemen pengguna
+├── Models/
+│   ├── BorrowedItem.php            # Model dengan hooks otomatis stok
+│   ├── ItemCategory.php            # Model dengan validasi duplikat
+│   ├── ItemStock.php               # Model dengan validasi duplikat
+│   ├── ReturnedItem.php            # Model data pengembalian
+│   └── User.php                    # Model user dengan canAccessPanel()
+├── Providers/
+│   ├── AppServiceProvider.php
+│   └── Filament/
+│       └── AdminPanelProvider.php  # Konfigurasi panel Filament
+└── Support/
+    └── PdfExport.php               # Helper generasi PDF (tabel & struk)
+
+database/
+├── migrations/                     # Skema tabel database
+└── seeders/
+    └── DatabaseSeeder.php          # Data awal (2 user default)
+```
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+
+---
+
+## 👨‍💻 Pengembang
+
+**Habiburramdhan**  
+Proyek UKK — Sistem Informasi Manajemen Inventaris
+
+🔗 **Repository:** [https://github.com/apipcode/inventaris-ukk](https://github.com/apipcode/inventaris-ukk)
